@@ -1,0 +1,113 @@
+html, body {
+  height: 100%;
+  color: #40415a;
+}
+
+.search-query {
+  border-radius: 33px;
+}
+
+
+.navbar-brand {
+  font-size: 22pt;
+  font-family: Comfortaa;
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -50px;
+}
+
+
+.push {
+  height: 50px;
+}
+
+
+.app-btn {
+  width: 100%;
+  background-color: #f12545;
+  border-color: #f12545;
+  color: white;
+  font-size:20px;
+}
+
+
+.app-btn:hover {
+  color: #fff;
+  background: #f01235;
+  border-color: #f01235;
+}
+
+
+.page-header {
+  padding-bottom:9px;
+  margin:40px 0 20px;
+  border-bottom:1px solid #eee
+}
+
+
+
+nav, footer {
+  background-color: #0d122b;
+}
+
+
+header .navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+} 
+
+header .navbar .username-divider {
+  border-right: 1px solid #ccc;
+  height: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
+main {
+  margin-top: 50px;
+}
+
+footer {
+  border-top: 1px solid #E7E7E7;
+  height: 50px;
+  color: white;
+  background-color: #0d122b;
+}
+
+footer .legal {
+  padding-top: 14px;
+}
+
+footer ul li {
+  display: inline;
+  margin-right: 15px;
+}
+
+
+.cover {
+  padding-top: 60px; 
+  padding-bottom: 80px;
+}
+
+.cover h1 {
+  font-size: 64px; 
+  margin-bottom: 30px;
+}
+
+
+
+/* Bootstrap overrides */
+
+.navbar-default .navbar-brand {
+  font-family: 'Playball';
+  font-weight: 400;
+  font-size: 2.4em;
+  color: white;
+}
