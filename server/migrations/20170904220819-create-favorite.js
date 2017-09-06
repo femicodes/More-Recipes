@@ -1,37 +1,30 @@
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
-		return queryInterface.createTable('Recipes', {
+		return queryInterface.createTable('Favorites', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			title: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			description: {
-				type: Sequelize.STRING
-			},
 			userId: {
 				type: Sequelize.INTEGER,
 				onDelete: 'CASCADE',
-				allowNull: false,
 				references: {
-					model: 'Users', 
+					model: 'Users',
 					key: 'id',
-					as: 'userId'
-				}
+					as: 'userId',
+				},
 			},
-			ingredient: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			direction: {
-				type: Sequelize.STRING,
-				allowNull: false
+			recipeId: {
+				type: Sequelize.INTEGER,
+				onDelete: 'CASCADE',
+				references: {
+					model: 'Recipes',
+					key: 'id',
+					as: 'recipeId',
+				},
 			},
 			createdAt: {
 				allowNull: false,
@@ -44,6 +37,6 @@ module.exports = {
 		});
 	},
 	down: function(queryInterface, Sequelize) {
-		return queryInterface.dropTable('Recipes');
+		return queryInterface.dropTable('Favorites');
 	}
 };

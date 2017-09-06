@@ -18,10 +18,12 @@
   },
   "homepage": "https://github.com/tobyleye/More-Recipes#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "crypto": "^1.0.1",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
+    "jsonwebtoken": "^7.4.3",
     "morgan": "^1.8.2",
     "pg": "^7.2.0",
     "pg-hstore": "^2.3.2",

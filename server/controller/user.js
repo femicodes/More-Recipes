@@ -1,64 +1,62 @@
 import db from '../models';
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const { User } = db;
 
 // Create users.
 export function createUser(req, res) {
+	const password = bcryptjs.hashSync(req.body.password, 10);
 	return User
 		.create({
-		username: req.body.username,
-		email: req.body.email,
-		password: req.body.password
+			username: req.body.username,
+			email: req.body.email,
+			password: password
 		})
-		.then(user => res.status(201)
-		.send(user))
-		.catch(error => res.status(400).send({error: error.message}))
-	};
+		.then(user => res.status(201).send({
+			id: user.id,
+			username: user.username,
+			email: user.email,
+		}))
+		.catch(err => res.status(400).send(
+			err.errors[0].message
+		));
+}
 
 
 // Sign in users
 export function loginUser(req, res) {
-	return User
-    .findOne({
-      where: { username: req.body.username,
-      password: req.body.password},
-    })
-    .then( user => {
-
-    	if (user) {
-    	  // console.log(user)
-    	  console.log(req.session);
-    	  req.session.user = user;
-
-	      res.status(200).send({
-	        message: 'Successfully Logged in!'
-	          })
-	    } else {
-	    res.status(401).send({ message: 'Wrong password or username!' });
-		}
-     })  
-    .catch(err => res.status(400).send({
-    	error: err.message
-    }));
-};
-
-
-// Logout user
-export function logoutUser(req, res) {
-	console.log(req.session.user);
-	if (req.session.user) {
-		req.session.destroy()
-	res.status(200).send({message: `Thanks for your time, Bye for now`})
-	} else {
-		res.status(404).send({message: `Sorry, you are not logged in`})
+	const {username, password} = req.body;
+	// console.log(username, password);
+	if ( !(username && password) ) {
+		res.status(400).send('username and password required');
 	}
+	return User
+		.findOne({
+			where: { 
+				username: req.body.username,
+			}
+		})
+		.then( user => { 
+			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '60m'});
+			bcryptjs.compare(req.body.password, user.password).then( check => {
+				if (check) {
+					// console.log(req.userId); 
+					res.status(200).send({
+						message: 'Logged in Successfully!',
+						token
+					});
+				} else res.status(401).send({
+					message: 'Wrong password or username!'
+				});
+			}).catch(err => res.status(400).send(
+				err.errors[0].message));
+		});
 }
 
 
-export function getAllUser(req, res) {
-	return User 
-		.all()
-		.then(user => res.status(200).send(user))
-		.catch(error => res.status(400)
-		.send({error: error.message}))
-	};
+// get favourite recipes 
+export function getFavorites(req, res) {
+	// something here
+}
+

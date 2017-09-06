@@ -1,35 +1,68 @@
-'use strict';
 module.exports = function(sequelize, DataTypes) {
-  const User = sequelize.define('User', {
-    username: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
-    },
+	const User = sequelize.define('User', {
+		username: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: {
+				args: true,
+				msg: 'Username is already taken, please enter another'
+			},
+			validate: {
+				len: {
+					args: [3,15],
+					msg: 'Please choose a username with length between the length 3 and 15'
+				}
+			}
+		},
+		fullname: {
+			type: DataTypes.STRING
+		},
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: {
+				args: true,
+				msg: 'Email is already taken, please enter another'
+			},
+			validate: {
+				isEmail: {
+					args: true,
+					msg: 'Please enter a valid email'
+				}
+			}
+		},
+		password: {
+			type: DataTypes.STRING,
+			allowNull: false
+		}
+	});
 
-    fullname: {
-      type: DataTypes.STRING
-    },
+	User.associate = models => {
+		// Associate User with Recipe
+		User.hasMany(models.Recipe, {
+			foreignKey: 'userId'
+			// as: 'userRecipe'
+		});
+		// Associate User with Favoritie
+		User.hasMany(models.Favorite, {
+			foreignKey: 'userId',
+			// as: 'userFavorite'
+		});
+		// Associate User with Review 
+		User.hasMany(models.Review, {
+			foreignKey: 'userId',
+			// as: 'userReviews'
+		});
+		// Associate User with Vote 
+		User.hasMany(models.Vote, {
+			foreignKey: 'userId'
+			// as: 'userVotes'
+		})
+	};
 
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
-    },
-
-    password: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
-      }
-    }, 
-
-    {
-      classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
-  return User;
+	return User;
 };
+
+// Things to buy for my folks !!!!!!!!!!!!!!
+// Splenda !! 
+// Tumeric Pounder !! 

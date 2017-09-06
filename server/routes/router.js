@@ -1,50 +1,60 @@
 import express from 'express';
 
-import { getTopRecipes } from '../controller/recipe';
-import {createUser, loginUser, getAllUser, logoutUser} from '../controller/user';
-import {createRecipe} from '../controller/recipe';
-
+import {createUser, loginUser} from '../controller/user';
+import {createRecipe, getRecipes, deleteRecipe, modifyRecipe} from '../controller/recipe';
+import { checkUsernameExist, checkRecipeExist} from '../middleware/validate';
+import {verifyUserSession } from '../middleware/authorize';
 
 const router = express.Router();
 
-
-// G E T    R E Q U E S T S 
-
+// -----------------------------------------------------
 router.get('/', (req, res) => {
-	res.status(200).send({message: "Welcome to More Recipes"})
+	res.status(200).send({message: 'Welcome to More Recipes'});
 });
 
-router.get('/api/recipes', getTopRecipes)
+// -------------------------------------------------------
 
-router.get('/api/users/', getAllUser)
+// signup
+router.post('/users/signup', createUser);
 
-router.get('/api/users/:userId/recipes', )
+// signin
+router.post('/users/signin', checkUsernameExist, loginUser);
 
+// create recipes
+router.post('/recipes', verifyUserSession, createRecipe);
 
+// modify recipes 
+router.put('/recipes/:recipeId', verifyUserSession, checkRecipeExist, modifyRecipe);
 
-// P O S T    R E Q U E S T S 
+//delete recipes
+router.delete('/recipes/:recipeId', verifyUserSession, checkRecipeExist, deleteRecipe);
 
-router.post('/api/users/signup', createUser)
-
-router.post('/api/users/signin', loginUser)
-
-router.get('/api/users/logout', logoutUser)
-
-router.post('/api/recipes/create', createRecipe);
-
-router.post('/api/recipes/:recipeId', (req, res) => {});
-
-router.post('/api/recipes/:recipeId/reviews', (req, res) => {
-
-});
+// get recipes
+router.get('/recipes', verifyUserSession, checkRecipeExist, getRecipes);
 
 
-// P U T    R E Q U E S T S
 
-router.put('/api/users/:userId/books', (req, res) => {});
+// post review for a recipe 
+router.post('/recipes/:recipeId/reviews', verifyUserSession);
 
-router.put('/api/books/:bookId', (req, res) => {});
+// get reviews of a recipe;
+router.get('/recipes/:recipeId/reviews', verifyUserSession);
 
+// get all favourites
+router.get('/api/users/:userId/recipes', verifyUserSession);
+
+// favourite a recipe
+router.post('/api/users/:userId/recipes', verifyUserSession);
+
+
+// upvote a recipe;
+router.post('/api/users/upvote/:recipeId', verifyUserSession);
+
+// downvote a recipe
+router.post('/api/users/upvote/:recipeId', verifyUserSession);
+
+// get recipes with the most upvotes 
+router.get('/api/recipes?sort=upvotes&order=ascending', verifyUserSession);
 
 
 export default router; 

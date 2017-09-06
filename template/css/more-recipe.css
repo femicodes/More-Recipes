@@ -50,10 +50,10 @@ html, body {
 }
 
 
-
-nav, footer {
-  background-color: #0d122b;
+nav {
+  background-color: #0D112B;
 }
+
 
 
 header .navbar {
@@ -74,8 +74,11 @@ main {
   margin-top: 50px;
 }
 
+
 footer {
+  /*
   border-top: 1px solid #E7E7E7;
+  */
   height: 50px;
   color: white;
   background-color: #0d122b;
