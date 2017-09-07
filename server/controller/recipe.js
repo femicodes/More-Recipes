@@ -25,6 +25,18 @@ export function getRecipe(req, res) {
 
 export function getRecipes(req, res) {
 	// console.log(req.query.sort, req.query.order);
+	const {sort, order} = req.query;
+	if (sort && order) {
+		if (order !== 'ascending' && order!== 'descending')
+			return res.status(400).send({success: false, message: 'Invalid order, Please use either ascending or descending'});
+		
+		// if it's in the right order 1
+		return Recipe.findAll(
+			// some expressions here
+		);
+	}
+
+	// if no query, just return all the recipes 
 	return Recipe
 		.all()
 		.then( recipes => res.status(200)
@@ -48,10 +60,9 @@ export function createRecipe(req, res) {
 			description,
 			ingredient,
 			direction,
-			
 		})
 		.then(recipe => res.status(201)
-			.send(recipe))
+			.json(recipe))
 		.catch( (err) => res.status(503).json({success: false, message: err.errors[0].message})
 		);
 }
@@ -74,10 +85,11 @@ export function modifyRecipe(req, res) {
 					ingredient: recipe.body.ingredient || recipe.ingredient,
 					direction: recipe.body.direction || recipe.direction,
 				})
-				.then( recipe => res.status(200).json({message: 'updated successfully', recipe}))
-				.catch(err => res.status(400).json({message: err.errors[0].message}));
+				.then( recipe => res.status(200).json({success: true, message: 'updated successfully', recipe}))
+				.catch(err => res.status(400).json({success: false, message: err.errors[0].message}));
 		})
-		.catch( () => res.status(503).send({
+		.catch( () => res.status(503).json({
+			success: false,
 			message: 'Error modifying recipe'
 		}));
 }
@@ -95,10 +107,10 @@ export function deleteRecipe(req, res) {
 			}
 			return recipe
 				.destroy()
-				.then( () => res.status(204).send({sucess: true, message: 'Recipe deleted successfully'}))
-				.catch(err => res.status(400).send({success: false, message: err.errors[0].message}));
+				.then( () => res.status(204).json({sucess: true, message: 'Recipe deleted successfully'}))
+				.catch(err => res.status(400).json({success: false, message: err.errors[0].message}));
 		})
-		.catch(err => res.status(503).send({
+		.catch(err => res.status(503).json({
 			success: false, 
 			message: err.errors[0].message
 		}));
