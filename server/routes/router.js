@@ -10,19 +10,16 @@ import {verifyUserSession } from '../middleware/authorize';
 
 const router = express.Router();
 
-// -----------------------------------------------------
 router.get('/', (req, res) => {
 	// console.log(req.query.token);
-	res.status(200).send({message: 'Welcome to More Recipes'});
+	res.status(200).send({success: true, message: 'Welcome to More Recipes'});
 });
-
-// -------------------------------------------------------
 
 // signup
 router.post('/users/signup', createUser);
 
 // signin
-router.post('/users/signin', loginUser);
+router.post('/users/signin', checkUsernameExist, loginUser);
 
 // create recipes
 router.post('/recipes', verifyUserSession, createRecipe);
@@ -45,15 +42,11 @@ router.post('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, p
 // get reviews of a recipe;
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
 
-
-
-
 // get all favourites
 router.get('/users/:userId/recipes', verifyUserSession, getUserFavorites);
 
 // favourite a recipe
-router.post('/users/:userId/recipes/:recipeId', verifyUserSession, checkRecipeExist, favoriteRecipe);
-
+router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, favoriteRecipe);
 
 // upvote a recipe;
 router.post('/users/upvote/:recipeId', verifyUserSession, checkRecipeExist, upvoteRecipe);
@@ -64,7 +57,6 @@ router.post('/users/downvote/:recipeId', verifyUserSession, checkRecipeExist, do
 
 // upvote or downvote 
 // router.post('/users/:recipeId/vote/:voteType', verifyUserSession );
-
 
 // get recipes with the most upvotes 
 router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);

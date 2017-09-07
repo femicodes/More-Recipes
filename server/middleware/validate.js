@@ -11,7 +11,7 @@ export function checkRecipeExist(req, res, next) {
 			}
 		})
 		.then( recipe => {
-			if (!recipe) res.status(404).send({message: 'Recipe does not exist'});
+			if (!recipe) res.status(404).json({success: false, message: 'Recipe does not exist'});
 			else next();
 		});
 
@@ -19,6 +19,10 @@ export function checkRecipeExist(req, res, next) {
 
 // check if username exist !
 export function checkUsernameExist(req, res, next) {
+	let username = req.body.username? req.body.username.trim(): '';
+	if ( !username ) 
+		return res.status(400).json({success: false, message:'username and password are required'});
+
 	User
 		.findOne({
 			where: {
@@ -27,7 +31,7 @@ export function checkUsernameExist(req, res, next) {
 		})
 		.then( user => {
 			if ( !user ){
-				res.status(404).send({message: 'User does not exist'});
+				res.status(404).json({success: false, message: 'Username does not match any account'});
 			} else next();
 		});
 }
@@ -42,7 +46,7 @@ export function checkUserExist(req, res, next) {
 		})
 		.then( user => {
 			if (!user){
-				res.status(404).send({message: 'User does not exist'});
+				res.status(404).json({success: false, message: 'User does not exist'});
 			} else next();
 		});
 }

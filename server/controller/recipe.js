@@ -13,12 +13,12 @@ export function getRecipe(req, res) {
 		.findById(recipeId)
 		.then( recipe => {
 			if (recipe)
-				res.status(200).send(recipe);
+				res.status(200).json(recipe);
 			else 
-				res.status(200).json({success: true, message: 'recipe does not exist'})  
+				res.status(200).json({success: true, message: 'recipe does not exist'});
 		})
-		.catch(err => res.status(404).send({
-			success: 'fail',
+		.catch(err => res.status(404).json({
+			success: false,
 			message: err.errors[0].message
 		}));
 }
@@ -28,11 +28,12 @@ export function getRecipes(req, res) {
 	return Recipe
 		.all()
 		.then( recipes => res.status(200)
-			.send(recipes)
+			.json(recipes)
 		)
-		.catch( err => res.status(404).send(
-			err.errors[0].message
-		));
+		.catch( err => res.status(404).json({
+			success: false,
+			message: err.errors[0].message
+		}));
 }
 
 // create a recipe 
@@ -64,7 +65,7 @@ export function modifyRecipe(req, res) {
 		.findById(recipeId)
 		.then( recipe => {
 			if (recipe.userId !== userId) {
-				res.status(403).send({message: 'Not authorized to delete this recipe!'});
+				res.status(403).json({success: false, message: 'Not authorized to delete this recipe!'});
 			}
 			return recipe
 				.update({
@@ -73,8 +74,8 @@ export function modifyRecipe(req, res) {
 					ingredient: recipe.body.ingredient || recipe.ingredient,
 					direction: recipe.body.direction || recipe.direction,
 				})
-				.then( recipe => res.status(200).send({message: 'updated successfully', recipe}))
-				.catch(err => res.status(400).send({message: err.errors[0].message}));
+				.then( recipe => res.status(200).json({message: 'updated successfully', recipe}))
+				.catch(err => res.status(400).json({message: err.errors[0].message}));
 		})
 		.catch( () => res.status(503).send({
 			message: 'Error modifying recipe'
@@ -90,14 +91,15 @@ export function deleteRecipe(req, res) {
 		.findById(req.params.recipeId)
 		.then( recipe => {
 			if (recipe.userId !==  userId) {
-				return res.status(404).send({message: 'Not authorized to delete this recipe'});
+				return res.status(404).json({success: false, message: 'Not authorized to delete this recipe'});
 			}
 			return recipe
 				.destroy()
-				.then( () => res.status(204).send({message: 'Recipe deleted successfully'}))
-				.catch(err => res.status(400).send(err));
+				.then( () => res.status(204).send({sucess: true, message: 'Recipe deleted successfully'}))
+				.catch(err => res.status(400).send({success: false, message: err.errors[0].message}));
 		})
 		.catch(err => res.status(503).send({
+			success: false, 
 			message: err.errors[0].message
 		}));
 }
