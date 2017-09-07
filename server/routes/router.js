@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 // signup
-router.post('/users/signup', checkUsernameExist, createUser);
+router.post('/users/signup', createUser);
 
 // signin
 router.post('/users/signin', checkUsernameExist, loginUser);
@@ -42,13 +42,11 @@ router.post('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, p
 // get reviews of a recipe;
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
 
-
 // get all favourites
 router.get('/users/:userId/recipes', verifyUserSession, getUserFavorites);
 
 // favourite a recipe
-router.post('/users/:userId/recipes/:recipeId', verifyUserSession, checkRecipeExist, favoriteRecipe);
-
+router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, favoriteRecipe);
 
 // upvote a recipe;
 router.post('/users/upvote/:recipeId', verifyUserSession, checkRecipeExist, upvoteRecipe);

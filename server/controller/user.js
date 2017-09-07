@@ -74,6 +74,7 @@ export function loginUser(req, res) {
 				if (check) {
 					// console.log(req.userId); 
 					res.status(200).json({
+						success: false,
 						message: 'Logged in Successfully!',
 						token
 					});
