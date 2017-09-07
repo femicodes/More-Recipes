@@ -2,7 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
 	const Vote = sequelize.define('Vote', {
 		voteType: {
-			type: DataTypes.STRING,
+			type: DataTypes.BOOLEAN,
 			allowNull: false
 		}
 	});

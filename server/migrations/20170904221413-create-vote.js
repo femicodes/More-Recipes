@@ -19,7 +19,7 @@ module.exports = {
 				}
 			},
 			voteType: {
-				type: Sequelize.STRING,
+				type: Sequelize.BOOLEAN,
 				allowNull: false,
 			},
 			recipeId: {

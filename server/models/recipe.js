@@ -4,26 +4,47 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'please enter a title'
+				msg: 'Title cannot be empty'
+			},
+			validate : {
+				notEmpty: {
+					args: false,
+					msg: 'Title cannot be empty'
+				}
 			}
 		}, 
 		description: {
-			type: DataTypes.STRING,
+				type: DataTypes.STRING,
 		},
+
 		ingredient: {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
 				msg: 'please enter at least one ingredient'
-			}
+			},
+			validate : {
+				notEmpty: {
+					args: false,
+					msg: 'Ingredient cannot be empty'
+				}
+			},
 		},
+
 		direction: {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
 				msg: 'please enter the recipe directions'
+			},
+			validate : {
+				notEmpty: {
+					args: false,
+					msg: 'Direction cannot be empty'
+				}
 			}
-		},
+		}
+
 	});
 	
 	Recipe.associate = models => {

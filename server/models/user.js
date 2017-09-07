@@ -2,7 +2,10 @@ module.exports = function(sequelize, DataTypes) {
 	const User = sequelize.define('User', {
 		username: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: {
+				args: false,
+				msg: 'Username cannot be empty'
+			},
 			unique: {
 				args: true,
 				msg: 'Username is already taken, please enter another'
@@ -19,7 +22,10 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		email: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: {
+				args: false,
+				msg: 'Email cannot be empty'
+			},
 			unique: {
 				args: true,
 				msg: 'Email is already taken, please enter another'
@@ -33,8 +39,18 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		password: {
 			type: DataTypes.STRING,
-			allowNull: false
-		}
+			allowNull: {
+				args: false,
+				msg: 'Password cannot be empty'
+			},
+			validate: {
+				min: {
+					args: 4,
+					msg: 'Password too short'
+				}
+			}
+		}	
+	
 	});
 
 	User.associate = models => {
