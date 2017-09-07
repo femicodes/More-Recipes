@@ -5,7 +5,7 @@ export function verifyUserSession(req, res, next) {
 	// console.log(token);
 	// if not token
 	if (!token) {
-		res.status(401).send('Session token is required!');
+		res.status(401).send({success: false, message: 'Session token is required!'});
 	} else {
     
 		// Check if token matches the one provided at login
