@@ -19,10 +19,10 @@ router.get('/', (req, res) => {
 // -------------------------------------------------------
 
 // signup
-router.post('/users/signup', createUser);
+router.post('/users/signup', checkUsernameExist, createUser);
 
 // signin
-router.post('/users/signin', loginUser);
+router.post('/users/signin', checkUsernameExist, loginUser);
 
 // create recipes
 router.post('/recipes', verifyUserSession, createRecipe);
