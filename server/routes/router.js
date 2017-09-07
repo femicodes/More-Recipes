@@ -10,13 +10,10 @@ import {verifyUserSession } from '../middleware/authorize';
 
 const router = express.Router();
 
-// -----------------------------------------------------
 router.get('/', (req, res) => {
 	// console.log(req.query.token);
-	res.status(200).send({message: 'Welcome to More Recipes'});
+	res.status(200).send({success: true, message: 'Welcome to More Recipes'});
 });
-
-// -------------------------------------------------------
 
 // signup
 router.post('/users/signup', checkUsernameExist, createUser);
@@ -46,8 +43,6 @@ router.post('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, p
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
 
 
-
-
 // get all favourites
 router.get('/users/:userId/recipes', verifyUserSession, getUserFavorites);
 
@@ -64,7 +59,6 @@ router.post('/users/downvote/:recipeId', verifyUserSession, checkRecipeExist, do
 
 // upvote or downvote 
 // router.post('/users/:recipeId/vote/:voteType', verifyUserSession );
-
 
 // get recipes with the most upvotes 
 router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);
