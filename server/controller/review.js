@@ -1,9 +1,9 @@
 import db from '../models';
 
-const { Recipe, Review } = db;
+const { Review } = db;
 
 // GET --> api/recipes/<recipeId>/reviews
-export function getReviews(req, res){
+export const getReviews = (req, res) => {
 	const {recipeId} = req.params;
 
 	Review
@@ -19,12 +19,13 @@ export function getReviews(req, res){
 			return res.status(201).json(reviews);
 		})
 		.catch(err => res.status(404).json(err));
-}
+};
 
 // --> api/recipes/<recipeId>/reviews
-export function postReview(req, res) {
+export const postReview = (req, res) => {
 	const { userId } = req;
 	const { content } = req.body; 
+
 	const { recipeId } = req.params;
 
 	// check if the content of the review is valid 
@@ -54,4 +55,4 @@ export function postReview(req, res) {
 		.catch( err => {
 			return res.status(500).json(err);
 		});
-}
+};

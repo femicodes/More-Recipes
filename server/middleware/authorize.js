@@ -1,23 +1,25 @@
 import jwt from 'jsonwebtoken';
 
-export function verifyUserSession(req, res, next) {
+export const verifyUserSession = (req, res, next) => {
 	const token = req.body.token || req.headers.token || req.query.token;
 	// console.log(token);
-	// if not token
-	if (!token) {
-		res.status(401).send({success: false, message: 'Session token is required!'});
+	// if no token --> 
+	if ( !token ) {
+		return res.status(500).json({success: false, message: 'Token is required!'});
 	} else {
     
 		// Check if token matches the one provided at login
 		jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
 			if (err) {
-				res.status(500).send(err);
-			} else {
-				// console.log("verified");
-				// console.log(decoded.user.id);
-				req.userId = decoded.user.id;
-				next();
+				if (err.message === 'TokenExpiredError')
+					return res.status(500).json({success: false, message: 'Session has expired, Please sign-in again'});
+				
+				return res.status(500).json({success: false, message: 'Failed to authenticate token'});
 			}
+			
+			// if no error at all
+			req.userId = decoded.user.id;
+			next();
 		});
 	}
-}
+};

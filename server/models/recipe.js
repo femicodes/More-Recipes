@@ -43,6 +43,16 @@ module.exports = function(sequelize, DataTypes) {
 					msg: 'Direction cannot be empty'
 				}
 			}
+		},
+
+		upvoteCount:{
+			type: DataTypes.INTEGER,
+			default: 0
+		},
+
+		downvoteCount:{
+			type: DataTypes.INTEGER,
+			default: 0
 		}
 
 	});

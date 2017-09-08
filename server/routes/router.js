@@ -3,7 +3,7 @@ import express from 'express';
 import { createUser, loginUser } from '../controller/user';
 import {createRecipe, getRecipes, getRecipe, deleteRecipe, modifyRecipe} from '../controller/recipe';
 import { postReview, getReviews } from '../controller/review';
-import { voteRecipe } from '../controller/votes';
+import { voteRecipe, countVote } from '../controller/votes';
 import { favoriteRecipe, getUserFavorites } from '../controller/favorite';
 import { checkUsernameExist, checkRecipeExist, checkUserExist} from '../middleware/validate';
 import { verifyUserSession } from '../middleware/authorize';
@@ -34,10 +34,10 @@ router.delete('/recipes/:recipeId', verifyUserSession, checkRecipeExist, deleteR
 router.get('/recipes', verifyUserSession, getRecipes);
 
 // get single recipe
-router.get('/recipes/:recipeId', verifyUserSession, getRecipe);
+router.get('/recipes/:recipeId', verifyUserSession, checkRecipeExist, getRecipe);
 
 // post review for a recipe 
-router.post('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, postReview);
+router.post('/recipes/:recipeId/review', verifyUserSession, checkRecipeExist, postReview);
 
 // get reviews of a recipe;
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
@@ -56,7 +56,7 @@ router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, f
 
 
 // upvote or downvote 
-router.post('/users/:recipeId/vote-:voteType', verifyUserSession, voteRecipe );
+router.post('/users/:recipeId/vote-:voteType', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
 
 // get recipes with the most upvotes 
 router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);

@@ -5,7 +5,7 @@ const { Recipe, Favorite } = db;
 
 // favourite a recipe
 // POST ---> api/users/:userId/recipes/:recipeId 
-export function favoriteRecipe(req, res) {
+export const favoriteRecipe = (req, res) => {
 	const { recipeId } = req.params;
 	const { userId } = req;
 
@@ -35,11 +35,11 @@ export function favoriteRecipe(req, res) {
 		})
 		.catch(err => res.status(500).json({success: false, message: err}));
 
-}
+};
 
 // get user favourite
 // GET ---> api/users/:userId/recipes
-export function getUserFavorites(req, res) {
+export const getUserFavorites = (req, res) => {
 
 	const { userId } = req.params;
 
@@ -63,4 +63,4 @@ export function getUserFavorites(req, res) {
 			return res.status(200).send(userFavorites); 
 		})
 		.catch(err => res.status(400).send(err));
-}
+};

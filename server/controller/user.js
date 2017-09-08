@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 const { User } = db;
 
 // Create users.
-export function createUser(req, res) {
+export const createUser = (req, res) => {
 
 	let username = req.body.username? req.body.username.trim(): ''; 
 	let email = req.body.email? req.body.email.trim(): '';
@@ -40,6 +40,7 @@ export function createUser(req, res) {
 			fullname: req.body.fullname
 		})
 		.then(user => res.status(201).json({
+			success: true,
 			id: user.id,
 			username: user.username,
 			email: user.email,
@@ -48,13 +49,13 @@ export function createUser(req, res) {
 			success: 'fail',
 			message: err.errors[0].message
 		}));
-}
+};
 
 
 //The username and password you entered did not match our records. Please double-check and try again.
 
 // Sign in users
-export function loginUser(req, res) {
+export const loginUser = (req, res) => {
 	let username = req.body.username? req.body.username.trim(): ''; 
 	let password = req.body.password;
 	// const {username, password} = req.body;
@@ -85,5 +86,5 @@ export function loginUser(req, res) {
 				success: 'fail',
 				message: err.errors[0].message}));
 		});
-}
+};
 
