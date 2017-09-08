@@ -5,7 +5,7 @@ const { Recipe, Favorite } = db;
 
 // favourite a recipe
 // POST ---> api/users/:userId/recipes/:recipeId 
-export function favoriteRecipe(req, res) {
+export const favoriteRecipe = (req, res) => {
 	const { recipeId } = req.params;
 	const { userId } = req;
 
@@ -29,17 +29,17 @@ export function favoriteRecipe(req, res) {
 						userId, 
 						recipeId
 					})
-					.then( () => res.status(200).json({message: 'Recipe have been added to favorites !'}))
+					.then( () => res.status(200).json({success: false, message: 'Recipe have been added to favorites !'}))
 					.catch(err => res.status(500).json({success: false, message: err}));
 			}
 		})
 		.catch(err => res.status(500).json({success: false, message: err}));
 
-}
+};
 
 // get user favourite
 // GET ---> api/users/:userId/recipes
-export function getUserFavorites(req, res) {
+export const getUserFavorites = (req, res) => {
 
 	const { userId } = req.params;
 
@@ -52,15 +52,15 @@ export function getUserFavorites(req, res) {
 				model: Recipe
 			}]
 		})
-		.then( favorite => {
-			if (!favorite) {
-				return res.status(404).send({
+		.then( favorites => {
+			if (!favorites) {
+				return res.status(200).send({
 					success:true,
 					message: 'No favorites found',
 				});
 			}
-
-			return res.status(200).send(favorite); 
+			const userFavorites = favorites.map( fav => fav.Recipe);
+			return res.status(200).send(userFavorites); 
 		})
 		.catch(err => res.status(400).send(err));
-}
+};

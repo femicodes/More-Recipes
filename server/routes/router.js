@@ -1,12 +1,12 @@
 import express from 'express';
 
-import {createUser, loginUser} from '../controller/user';
+import { createUser, loginUser } from '../controller/user';
 import {createRecipe, getRecipes, getRecipe, deleteRecipe, modifyRecipe} from '../controller/recipe';
-import {postReview, getReviews} from '../controller/review';
-import {upvoteRecipe, downvoteRecipe } from '../controller/votes';
+import { postReview, getReviews } from '../controller/review';
+import { voteRecipe, countVote } from '../controller/votes';
 import { favoriteRecipe, getUserFavorites } from '../controller/favorite';
-import { checkUsernameExist, checkRecipeExist} from '../middleware/validate';
-import {verifyUserSession } from '../middleware/authorize';
+import { checkUsernameExist, checkRecipeExist, checkUserExist} from '../middleware/validate';
+import { verifyUserSession } from '../middleware/authorize';
 
 const router = express.Router();
 
@@ -34,29 +34,29 @@ router.delete('/recipes/:recipeId', verifyUserSession, checkRecipeExist, deleteR
 router.get('/recipes', verifyUserSession, getRecipes);
 
 // get single recipe
-router.get('/recipes/:recipeId', verifyUserSession, getRecipe);
+router.get('/recipes/:recipeId', verifyUserSession, checkRecipeExist, getRecipe);
 
 // post review for a recipe 
-router.post('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, postReview);
+router.post('/recipes/:recipeId/review', verifyUserSession, checkRecipeExist, postReview);
 
 // get reviews of a recipe;
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
 
 // get all favourites
-router.get('/users/:userId/recipes', verifyUserSession, getUserFavorites);
+router.get('/users/:userId/recipes', verifyUserSession, checkUserExist, getUserFavorites);
 
 // favourite a recipe
 router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, favoriteRecipe);
 
 // upvote a recipe;
-router.post('/users/upvote/:recipeId', verifyUserSession, checkRecipeExist, upvoteRecipe);
+// router.post('/users/upvote/:recipeId', verifyUserSession, checkRecipeExist, upvoteRecipe);
 
 // downvote a recipe
-router.post('/users/downvote/:recipeId', verifyUserSession, checkRecipeExist, downvoteRecipe);
+// router.post('/users/downvote/:recipeId', verifyUserSession, checkRecipeExist, downvoteRecipe);
 
 
 // upvote or downvote 
-// router.post('/users/:recipeId/vote/:voteType', verifyUserSession );
+router.post('/users/:recipeId/vote-:voteType', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
 
 // get recipes with the most upvotes 
 router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);

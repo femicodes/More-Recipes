@@ -14,14 +14,14 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		}, 
 		description: {
-				type: DataTypes.STRING,
+			type: DataTypes.STRING,
 		},
 
 		ingredient: {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'please enter at least one ingredient'
+				msg: 'Please enter at least one ingredient'
 			},
 			validate : {
 				notEmpty: {
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'please enter the recipe directions'
+				msg: 'Please enter the recipe directions'
 			},
 			validate : {
 				notEmpty: {
@@ -43,6 +43,16 @@ module.exports = function(sequelize, DataTypes) {
 					msg: 'Direction cannot be empty'
 				}
 			}
+		},
+
+		upvoteCount:{
+			type: DataTypes.INTEGER,
+			default: 0
+		},
+
+		downvoteCount:{
+			type: DataTypes.INTEGER,
+			default: 0
 		}
 
 	});

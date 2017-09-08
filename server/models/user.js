@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
 			validate: {
 				len: {
 					args: [3,15],
-					msg: 'Please choose a username with length between the length 3 and 15'
+					msg: 'username must be between the length 3 and 15'
 				}
 			}
 		},
@@ -45,8 +45,8 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			validate: {
 				min: {
-					args: 4,
-					msg: 'Password too short'
+					args: 6,
+					msg: 'Password must be atleast 6 characters long !'
 				}
 			}
 		}	

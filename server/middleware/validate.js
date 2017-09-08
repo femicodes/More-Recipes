@@ -4,16 +4,21 @@ const {User, Recipe} = db;
 
 
 export function checkRecipeExist(req, res, next) {
+	// console.log(typeof req.params.recipeId);
+
+	let recipeId = req.params.recipeId ? parseInt(req.params.recipeId) : '';
+	console.log(recipeId);
 	Recipe 
 		.findOne({
 			where: {
-				id: req.params.recipeId
+				id: recipeId
 			}
 		})
 		.then( recipe => {
 			if (!recipe) res.status(404).json({success: false, message: 'Recipe does not exist'});
 			else next();
-		});
+		})
+		.catch( () => res.status(500).json({success: false, message: 'Invalid recipe id'}));
 
 }
 
@@ -48,5 +53,6 @@ export function checkUserExist(req, res, next) {
 			if (!user){
 				res.status(404).json({success: false, message: 'User does not exist'});
 			} else next();
-		});
+		})
+		.catch( () => res.status(500).json({success: false, message: 'invalid user id; id must be an integer'}));
 }
