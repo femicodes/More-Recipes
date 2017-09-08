@@ -6,7 +6,8 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register server/test/test.js ",
     "start": "babel-node ./server/bin/www",
-    "start:dev": "nodemon --exec babel-node ./server/bin/www"
+    "start:dev": "nodemon --exec babel-node ./server/bin/www",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
