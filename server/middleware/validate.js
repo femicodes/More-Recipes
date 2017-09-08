@@ -7,7 +7,7 @@ export function checkRecipeExist(req, res, next) {
 	// console.log(typeof req.params.recipeId);
 
 	let recipeId = req.params.recipeId ? parseInt(req.params.recipeId) : '';
-	console.log(recipeId);
+	// console.log(recipeId);
 	Recipe 
 		.findOne({
 			where: {
@@ -15,7 +15,7 @@ export function checkRecipeExist(req, res, next) {
 			}
 		})
 		.then( recipe => {
-			if (!recipe) res.status(404).json({success: false, message: 'Recipe does not exist'});
+			if (!recipe) return res.status(404).json({success: false, message: 'Recipe does not exist'});
 			else next();
 		})
 		.catch( () => res.status(500).json({success: false, message: 'Invalid recipe id'}));

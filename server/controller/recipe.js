@@ -80,8 +80,14 @@ export const getRecipes = (req, res) => {
 // create a recipe 
 export const createRecipe = (req, res) => {
 	const {userId} = req;
-	const {title, description, ingredient, direction} = req.body;
-	// console.log(userId);
+	// const {title, description, ingredient, direction} = req.body;
+	
+	let title = req.body.title? req.body.title.trim(): ''; 
+	let description = req.body.description? req.body.description.trim(): '';
+	let ingredient = req.body.ingredient ? req.body.ingredient.trim(): '';
+	let direction = req.body.direction? req.body.direction.trim(): '';
+
+	// console.log(userId)
 	return Recipe
 		.create({
 			userId,
@@ -122,21 +128,20 @@ export const modifyRecipe = (req, res) => {
 			message: 'Error modifying recipe'
 		}));
 };
+	
 
-
-// delete recipe
 export const deleteRecipe = (req, res) => {
 	const {userId} = req;
 	// console.log(userId);
-	return Recipe
+	Recipe
 		.findById(req.params.recipeId)
 		.then( recipe => {
 			if (recipe.userId !==  userId) {
 				return res.status(404).json({success: false, message: 'Not authorized to delete this recipe'});
 			}
-			return recipe
+			recipe
 				.destroy()
-				.then( () => res.status(204).json({sucess: true, message: 'Recipe deleted successfully'}))
+				.then( () => res.status(200).json({sucess: true, message: 'Recipe deleted successfully'}))
 				.catch( () => res.status(400).json({success: false, message: 'Recipe cannot be deleted'}));
 		})
 		.catch(err => res.status(500).json({

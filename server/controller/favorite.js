@@ -62,5 +62,5 @@ export const getUserFavorites = (req, res) => {
 			const userFavorites = favorites.map( fav => fav.Recipe);
 			return res.status(200).send(userFavorites); 
 		})
-		.catch(err => res.status(400).send(err));
+		.catch(err => res.status(500).send(err));
 };
