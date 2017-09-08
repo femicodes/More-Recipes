@@ -4,9 +4,9 @@
   "description": "A platform for users to share the awesome and exciting recipes ideas they have learnt or invented",
   "main": "index.js",
   "scripts": {
+    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register server/test/test.js ",
     "start": "babel-node ./server/bin/www",
-    "start:dev": "nodemon --exec babel-node ./server/bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "nodemon --exec babel-node ./server/bin/www"
   },
   "repository": {
     "type": "git",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "chai": "^4.1.1",
     "coveralls": "^2.13.1",
+    "cross-env": "^5.0.5",
     "eslint": "^4.5.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
@@ -50,6 +51,7 @@
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0",
     "nodemon": "^1.11.0",
+    "nyc": "^11.2.1",
     "supertest": "^3.0.0"
   }
 }

@@ -42,13 +42,13 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: {
 				args: false,
 				msg: 'Password cannot be empty'
-			},
-			validate: {
-				min: {
-					args: 6,
-					msg: 'Password must be atleast 6 characters long !'
-				}
 			}
+			// validate: {
+			// 	min: {
+			// 		args: 6,
+			// 		msg: 'Password must be atleast 6 characters long !'
+			// 	}
+			// }
 		}	
 	
 	});
