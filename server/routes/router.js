@@ -56,7 +56,7 @@ router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, f
 
 
 // upvote or downvote 
-router.post('', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
+router.post('/users/:recipeId/vote-:voteType', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
 
 // get recipes with the most upvotes 
 router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);
