@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 	// console.log(req.query.token);
-	res.status(200).send({success: true, message: 'Welcome to More Recipes'});
+	res.status(200).json({success: true, message: 'Welcome to More Recipes'});
 });
 
 // signup

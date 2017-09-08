@@ -25,7 +25,7 @@ export const createUser = (req, res) => {
 		err_msg ='invalid email address';
 	} else if (password === '') {
 		err_msg = 'Password cannot be empty';
-	} else if (password.length <= 6) {
+	} else if (password.length < 6) {
 		err_msg = 'Password must be atleast 6 characters long !';
 	}
 
@@ -41,6 +41,7 @@ export const createUser = (req, res) => {
 		})
 		.then(user => res.status(201).json({
 			success: true,
+			message: 'Account created successfully',
 			id: user.id,
 			username: user.username,
 			email: user.email,
