@@ -23,11 +23,11 @@ A platform for users to share the awesome and exciting recipes ideas they have l
   - Deletes a recipe
 - **`GET` /recipes**
   - Get all recipes
-  - **`GET` /recipes/:id**
+- **`GET` /recipes/:id**
   - Get a single recipe by its id
 - **`POST` /recipes/:id/reviews**
   - Post new review for a recipe
-  - **`GET` /recipes/:id/reviews**
+- **`GET` /recipes/:id/reviews**
   - Get all the reviews for a recipe
 - **`POST` /recipes/:id/favorite**
   - Favorite a recipe
@@ -38,7 +38,7 @@ A platform for users to share the awesome and exciting recipes ideas they have l
 
 - **`GET` /users/:uid/favorites**
   - Returns all user's favorite recipes
-  - **`GET` /users/:uid/recipes**
+- **`GET` /users/:uid/recipes**
   - Returns all user's recipes
 - **`POST` /users/signin**
   - Creates a new user, returns user token
