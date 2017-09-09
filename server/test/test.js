@@ -27,28 +27,28 @@ describe('API Integration Tests', () => {
 			});
 	});
 
-	describe('User signup', () => {
-		const signupURl = `${rootURL}/users/signup`;
+	// describe('User signup', () => {
+	// 	const signupURl = `${rootURL}/users/signup`;
 	
-		beforeEach(() => {
-			data = {
-				username: 'user1',
-				password: 'password',
-				email: 'example@user.com',
-			};
-		});
+	// 	beforeEach(() => {
+	// 		data = {
+	// 			username: 'user1',
+	// 			password: 'password',
+	// 			email: 'example@user.com',
+	// 		};
+	// 	});
 		
-		// it('return 201 for a successful account creation', (done) => {
+		it('return 201 for a successful account creation', (done) => {
 			
-		// 	request.post(signupURl)
-		// 		.send(data)
-		// 		.end((err, res) => {
-		// 			expect(res.status).to.equal(201);
-		// 			expect(res.body.success).to.equal(true);
-		// 			expect(res.body.message).to.equal('Account created successfully');
-		// 			done();
-		// 		});
-		// });
+			request.post(signupURl)
+				.send(data)
+				.end((err, res) => {
+					expect(res.status).to.equal(201);
+					expect(res.body.success).to.equal(true);
+					expect(res.body.message).to.equal('Account created successfully');
+					done();
+				});
+		});
 
 		it('return 422 for an empty username ', (done) => {
 			const invalidData = Object.assign({}, data);

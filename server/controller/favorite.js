@@ -20,7 +20,7 @@ export const favoriteRecipe = (req, res) => {
 				// console.log(favorite);
 				return favorite
 					.destroy()  
-					.then(res.status(400).json({success: true, message: 'Recipe have been removed from favorites!'}));
+					.then(res.status(200).json({success: true, message: 'Recipe have been removed from favorites!'}));
 
 				// return res.status(400).send({message: 'Recipe has already been added to favorites!'});
 			} else {
@@ -29,11 +29,11 @@ export const favoriteRecipe = (req, res) => {
 						userId, 
 						recipeId
 					})
-					.then( () => res.status(200).json({success: false, message: 'Recipe have been added to favorites !'}))
-					.catch(err => res.status(500).json({success: false, message: err}));
+					.then( () => res.status(200).json({success: true, message: 'Recipe have been added to favorites!'}))
+					.catch( () => res.status(500).json({success: false, message: 'An error occured'}));
 			}
 		})
-		.catch(err => res.status(500).json({success: false, message: err}));
+		.catch( () => res.status(500).json({success: false, message: 'An error occured !'}));
 
 };
 
@@ -53,14 +53,16 @@ export const getUserFavorites = (req, res) => {
 			}]
 		})
 		.then( favorites => {
-			if (!favorites) {
-				return res.status(200).send({
+			const favoritesCount =  favorites.length;
+			// console.log(favorites);
+			if ( favoritesCount == 0 ) {
+				return res.status(200).json({
 					success:true,
-					message: 'No favorites found',
+					message: 'User has no recipes in favorites',
 				});
 			}
-			const userFavorites = favorites.map( fav => fav.Recipe);
-			return res.status(200).send(userFavorites); 
+			const recipes = favorites.map( fav => fav.Recipe);
+			return res.status(200).json({success: true, message: `${favoritesCount} recipes found in favorite`, recipes}); 
 		})
-		.catch(err => res.status(500).send(err));
+		.catch( () => res.status(500).json({success: false, message: 'An error occured! '}));
 };
