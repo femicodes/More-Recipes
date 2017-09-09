@@ -1,17 +1,16 @@
 import express from 'express';
 
-import { createUser, loginUser } from '../controller/user';
+import { createUser, loginUser, getUserRecipes} from '../controller/user';
 import {createRecipe, getRecipes, getRecipe, deleteRecipe, modifyRecipe} from '../controller/recipe';
 import { postReview, getReviews } from '../controller/review';
 import { voteRecipe, countVote } from '../controller/votes';
 import { favoriteRecipe, getUserFavorites } from '../controller/favorite';
 import { checkUsernameExist, checkRecipeExist, checkUserExist} from '../middleware/validate';
-import { verifyUserSession } from '../middleware/authorize';
+import { verifyUserSession } from '../middleware/authorize';	
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	// console.log(req.query.token);
 	res.status(200).json({success: true, message: 'Welcome to More Recipes'});
 });
 
@@ -43,23 +42,18 @@ router.post('/recipes/:recipeId/review', verifyUserSession, checkRecipeExist, po
 router.get('/recipes/:recipeId/reviews', verifyUserSession, checkRecipeExist, getReviews);
 
 // get all favourites
-router.get('/users/:userId/recipes', verifyUserSession, checkUserExist, getUserFavorites);
+router.get('/users/:userId/favorites', verifyUserSession, checkUserExist, getUserFavorites);
+
+router.get('/users/:userId/recipes', verifyUserSession, checkUserExist, getUserRecipes);
 
 // favourite a recipe
-router.post('/users/:recipeId/favourite', verifyUserSession, checkRecipeExist, favoriteRecipe);
-
-// upvote a recipe;
-// router.post('/users/upvote/:recipeId', verifyUserSession, checkRecipeExist, upvoteRecipe);
-
-// downvote a recipe
-// router.post('/users/downvote/:recipeId', verifyUserSession, checkRecipeExist, downvoteRecipe);
-
+router.post('/recipes/:recipeId/favorite', verifyUserSession, checkRecipeExist, favoriteRecipe);
 
 // upvote or downvote 
-router.post('/users/:recipeId/vote-:voteType', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
+router.post('/recipes/:recipeId/vote-:voteType', verifyUserSession, checkRecipeExist, voteRecipe, countVote );
 
 // get recipes with the most upvotes 
-router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);
+// router.get('/recipes?sort=upvotes&order=ascending', verifyUserSession);
 
 
 export default router; 

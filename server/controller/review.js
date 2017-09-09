@@ -30,7 +30,7 @@ export const postReview = (req, res) => {
 
 	// check if the content of the review is valid 
 	if ( !content || !content.trim() ) 
-		return res.status(400).json({success: false, message: 'Review cannot be empty'});
+		return res.status(400).json({success: false, message: 'Review is required'});
 	// check if the user have posted a review on the recipe before
 	// a user can only post a review once. 
 	Review

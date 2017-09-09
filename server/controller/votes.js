@@ -19,71 +19,79 @@ export const voteRecipe = (req, res, next) => {
 		});
 	
 	Recipe
-		.findById(recipeId)
-		.then( recipe => {
-			if (recipe.userId === userId) 
-				return res.status(200).json({success: false, message: 'Cant vote on own recipe'});
-		});
-
-	// store upvotes as true and downvote as false --> basically convert vote to boolean
-	// stores true when upvote and false when downvote
-	const voteCond = voteType === 'up' ? true: false;
-	Vote
-		.findAll({
-			where: {
-				recipeId
-			}
+		.find({
+			where: {id: recipeId, userId}
 		})
-		.then (votes => { 
-			
-			const alreadyVoted = votes.map( v => v.userId);
-			if ( alreadyVoted.includes(userId) ) {
+		.then( recipe => {
+			console.log('in then statement')
+			// console.log(recipe)
+
+			if (recipe) {
+				// console.log('\n\ninside if statement\n\n');
+				return res.status(200).json({success: false, message: 'Cant vote on own recipe'});
 				
-				const userVote = votes.filter(v => v.userId = userId )[0];
-				// console.log(userVote);
-				// console.log(`User vote type -----> ${typeof userVote.dataValues.voteType}`);
+			} else {
 
-				// console.log(userVote.dataValues.VoteType === voteCond);
+				// store upvotes as true and downvote as false --> basically convert vote to boolean
+				// stores true when upvote and false when downvote
+				console.log('\n\nstill running\n\n')
+				const voteCond = voteType === 'up' ? true: false;
+				Vote
+					.findAll({
+						where: {
+							recipeId
+						}
+					})
+					.then (votes => { 
+						
+						const alreadyVoted = votes.map( v => v.userId);
+						if ( alreadyVoted.includes(userId) ) {
+							
+							const userVote = votes.filter(v => v.userId = userId )[0];
 
-				if (userVote.dataValues.voteType === voteCond) {
-					return Vote
-						.findById(userVote.id)
-						.then( vote => vote
-							.destroy()
+							if (userVote.dataValues.voteType === voteCond) {
+								return Vote
+									.findById(userVote.id)
+									.then( vote => vote
+										.destroy()
+										.then( () => {
+											
+											next();
+										}));
+								// .catch( () => res.status(500).json({success: false, message: 'Error'})));
+							} 
+
+							return Vote 
+								.findById(userVote.id)
+								.then( vote => vote.update({
+									voteType: voteCond
+								}).then( () => {
+									// res.status(200).json({success: true, message:`${voteType}vote have been recorded successfully`});
+									next();
+								}));
+						}
+						// .catch();
+						
+						return Vote
+							.create({recipeId, userId, voteType: voteCond})
 							.then( () => {
-								
+								// res.status(200).json({success: true, message: `${voteType}vote has been recorded successfully`});
 								next();
-							}));
-					// .catch( () => res.status(500).json({success: false, message: 'Error'})));
-				} 
-
-				return Vote 
-					.findById(userVote.id)
-					.then( vote => vote.update({
-						voteType: voteCond
-					}).then( () => {
-						// res.status(200).json({success: true, message:`${voteType}vote have been recorded successfully`});
-						next();
-					}));
-			}
-			// .catch();
-			
-			return Vote
-				.create({recipeId, userId, voteType: voteCond})
-				.then( () => {
-					// res.status(200).json({success: true, message: `${voteType}vote has been recorded successfully`});
-					next();
-				});
-			// .catch( (err) => res.status(500).json({success: false, message: err}));
-		});
-	// .catch( () =>  res.status(500).json({success: false, message: 'cannot vote recipe'}));
+							});
+						// .catch( (err) => res.status(500).json({success: false, message: err}));
+					});
+				}
+			})
 };
+
 
 
 // count vote ! 
 export const countVote = (req, res) => {
+	console.log('Entering application\n\n\n')
+	const {userId} = req;
 	const recipeId = parseInt(req.params.recipeId);
-	// console.log(recipeId);
+
 
 	Vote
 		.findAll({
@@ -100,9 +108,9 @@ export const countVote = (req, res) => {
 			Recipe
 				.findById(recipeId)
 				.then( recipe => recipe.update({upvoteCount,downvoteCount})
-					.then( updatedRecipe => {
+					.then( recipe => {
 						res.status(200).json({ success: true,
-							updatedRecipe
+							recipe
 						});
 					})
 				);

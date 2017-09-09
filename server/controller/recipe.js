@@ -34,13 +34,15 @@ export const getRecipes = (req, res) => {
 		// if sort and order exist convert them to lowercase ! 
 		sort = sort.toLowerCase(); 
 		order = order.toLowerCase();
+		
+		if (sort !== 'upvotes' && sort !== 'downvotes')
+			return res.status(400).json({success: false, message: `Cannot sort recipes by ${sort}`});
+		
 
 		if (order !== 'ascending' && order !== 'descending')
 			return res.status(400).send({success: false, message: 'Invalid order, Please use either ascending or descending'});
 		
-		if (sort !== 'upvotes' && sort !== 'downvotes')
-			return res.status(400).json({success: false, message: `Cannot sort by ${sort}`});
-		
+
 		
 		const orderCriteria = order === 'ascending'? 'ASC' : 'DESC';
 		const sortCriteria = sort === 'upvotes'? 'upvoteCount' : 'downvoteCount';
@@ -82,7 +84,7 @@ export const createRecipe = (req, res) => {
 	const {userId} = req;
 	// const {title, description, ingredient, direction} = req.body;
 	
-	let title = req.body.title? req.body.title.trim(): ''; 
+	let title = req.body.title? req.body.title.trim() : '';
 	let description = req.body.description? req.body.description.trim(): '';
 	let ingredient = req.body.ingredient ? req.body.ingredient.trim(): '';
 	let direction = req.body.direction? req.body.direction.trim(): '';
@@ -98,7 +100,7 @@ export const createRecipe = (req, res) => {
 		})
 		.then(recipe => res.status(201)
 			.json({message: 'recipe created successfully', recipe}))
-		.catch( (err) => res.status(500).json({success: false, message: err.errors[0].message})
+		.catch( (err) => res.status(500).json({success: false, message: err})
 		);
 };
 

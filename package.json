@@ -3,14 +3,33 @@
   "version": "1.0.0",
   "description": "A platform for users to share the awesome and exciting recipes ideas they have learnt or invented",
   "main": "index.js",
+  
   "scripts": {
+    "heroku-postbuild": "npm run migrate",
+    "start": "babel-node server/bin/www",
+    "start:dev": "nodemon --exec babel-node server/bin/www",
+    "test:local": "cross-env NODE_ENV=test_local&& npm run migrate:undo&& npm run migrate&& nyc mocha server/test/test.js --compilers js:babel-core/register",
+    "test:db": "set NODE_ENV=test && sequelize db:migrate:undo:all&&sequelize db:migrate && cross-env NODE_ENV=test nyc mocha server/test/test.js", 
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register server/test/test.js ",
-    "start": "babel-node ./server/bin/www",
-    "start:dev": "nodemon --exec babel-node ./server/bin/www"
+    "migrate": "sequelize db:migrate",
+    "migrate:undo": "sequelize db:migrate:undo:all",
+    "coverage": "node istanbul cover _mocha -- -R spec",
+    "coveralls": "nyc npm test&& nyc report --reporter-text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tobyleye/More-Recipes.git"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "author": "toby",
   "license": "ISC",
@@ -31,6 +50,7 @@
     "express-session": "^1.15.5",
     "jsonwebtoken": "^7.4.3",
     "mocha": "^3.5.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "morgan": "^1.8.2",
     "pg": "^7.2.0",
     "pg-hstore": "^2.3.2",
@@ -53,5 +73,10 @@
     "nodemon": "^1.11.0",
     "nyc": "^11.2.1",
     "supertest": "^3.0.0"
-  }
+  },
+  "keywords": [
+    "Javascript",
+    "express",
+    "restful-api"
+  ]
 }

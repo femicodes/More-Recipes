@@ -24,7 +24,9 @@ export function checkRecipeExist(req, res, next) {
 
 // check if username exist !
 export function checkUsernameExist(req, res, next) {
-	let username = req.body.username? req.body.username.trim(): '';
+	console.log(req.body.username);
+
+	let username = ( req.body.username && typeof req.body.username === 'string' )? req.body.username.trim(): '';
 	if ( !username ) 
 		return res.status(400).json({success: false, message:'username and password are required'});
 

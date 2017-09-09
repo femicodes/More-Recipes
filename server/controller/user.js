@@ -2,7 +2,7 @@ import db from '../models';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const { User } = db;
+const { User, Recipe } = db;
 
 // Create users.
 export const createUser = (req, res) => {
@@ -16,17 +16,17 @@ export const createUser = (req, res) => {
 
 	let err_msg;
 	if (username === ''){
-		err_msg = 'Username cannot be empty';
+		err_msg = 'Username is required';
 	} else if (email === '') {
-		err_msg = 'Email cannot be empty';
+		err_msg = 'Email is required';
 	} else if ( !USERNAME_REGEXP.test(username) ) {
-		err_msg = 'Username is invalid';
+		err_msg = 'Username must be atleast 3 characters long and alphanumeric';
 	} else if (email.length <= 4 || email.length > 30 || !EMAIL_REGEXP.test(email)) {
 		err_msg ='invalid email address';
 	} else if (password === '') {
-		err_msg = 'Password cannot be empty';
+		err_msg = 'Password is required';
 	} else if (password.length < 6) {
-		err_msg = 'Password must be atleast 6 characters long !';
+		err_msg = 'Password must be atleast 6 characters long!';
 	}
 
 	if (err_msg) 
@@ -39,15 +39,19 @@ export const createUser = (req, res) => {
 			password: bcryptjs.hashSync(password, 10),
 			fullname: req.body.fullname
 		})
-		.then(user => res.status(201).json({
-			success: true,
-			message: 'Account created successfully',
-			id: user.id,
-			username: user.username,
-			email: user.email,
-		}))
+		.then(user => {
+			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '120m'});
+			res.status(201).json({
+				success: true,
+				message: 'Account created successfully',
+				id: user.id,
+				username: user.username,
+				email: user.email,
+				token
+			});
+		})
 		.catch(err => res.status(400).json({
-			success: 'fail',
+			success: false,
 			message: err.errors[0].message
 		}));
 };
@@ -59,10 +63,9 @@ export const createUser = (req, res) => {
 export const loginUser = (req, res) => {
 	let username = req.body.username? req.body.username.trim(): ''; 
 	let password = req.body.password;
-	// const {username, password} = req.body;
-	// console.log(username, password);
+	
 	if ( !(username && password) ) 
-		return res.status(400).json({message:'username and password are required'});
+		return res.status(400).json({success: false, message:'username and password are required'});
 
 	return User
 		.findOne({
@@ -81,11 +84,35 @@ export const loginUser = (req, res) => {
 						token
 					});
 				} else res.status(401).json({
+					success: false,
 					message: 'Wrong username and password!'
 				});
 			}).catch(err => res.status(400).json({
-				success: 'fail',
+				success: false,
 				message: err.errors[0].message}));
 		});
 };
 
+
+export const getUserRecipes = (req, res) => {
+	const { userId } = req.params;
+	// console.log(userId);
+	Recipe
+		.findAll({
+			where: {
+				userId
+			}
+		})
+		.then( recipes => {
+			const recipesCount =  recipes.length;
+			// console.log(favorites);
+			if ( recipesCount == 0 ) {
+				return res.status(200).json({
+					success:true,
+					message: 'User has no recipes posted',
+				});
+			}
+			return res.status(200).json({success: true, message: `${recipesCount} recipes posted`, recipes}); 
+		})
+		.catch( () => res.status(500).json({success: false, message: 'An error occured! '}));
+};

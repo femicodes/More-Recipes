@@ -15,6 +15,11 @@ module.exports = {
 			description: {
 				type: Sequelize.STRING
 			},
+			img_url: {
+				type: Sequelize.STRING,
+				defaultValue: 'no-img'
+	
+			},
 			userId: {
 				type: Sequelize.INTEGER,
 				onDelete: 'CASCADE',
@@ -35,11 +40,11 @@ module.exports = {
 			},
 			upvoteCount: {
 				type: Sequelize.INTEGER,
-				default: 0
+				defaultValue: 0
 			},
 			downvoteCount: {
 				type: Sequelize.INTEGER,
-				default: 0
+				defaultValue: 0
 			},
 			createdAt: {
 				allowNull: false,
