@@ -4,12 +4,12 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'Title cannot be empty'
+				msg: 'Title is required'
 			},
 			validate : {
 				notEmpty: {
 					args: false,
-					msg: 'Title cannot be empty'
+					msg: 'Title is required'
 				}
 			}
 		}, 
@@ -17,16 +17,22 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 		},
 
+		img_url: {
+			type: DataTypes.STRING,
+			defaultValue: 'no-img'
+
+		},
+
 		ingredient: {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'Please enter at least one ingredient'
+				msg: 'Ingredient is required'
 			},
 			validate : {
 				notEmpty: {
 					args: false,
-					msg: 'Ingredient cannot be empty'
+					msg: 'Ingredient is required'
 				}
 			},
 		},
@@ -35,24 +41,24 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: {
 				args: false,
-				msg: 'Please enter the recipe directions'
+				msg: 'direction is required'
 			},
 			validate : {
 				notEmpty: {
 					args: false,
-					msg: 'Direction cannot be empty'
+					msg: 'direction is required'
 				}
 			}
 		},
 
 		upvoteCount:{
 			type: DataTypes.INTEGER,
-			default: 0
+			defaultValue: 0
 		},
 
 		downvoteCount:{
 			type: DataTypes.INTEGER,
-			default: 0
+			defaultValue: 0
 		}
 
 	});

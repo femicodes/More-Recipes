@@ -22,23 +22,23 @@ export const favoriteRecipe = (req, res) => {
 					.destroy()  
 					.then(res.status(200).json({success: true, message: 'Recipe have been removed from favorites!'}));
 
-				// return res.status(400).send({message: 'Recipe has already been added to favorites!'});
-			} else {
-				return Favorite
-					.create({
-						userId, 
-						recipeId
-					})
-					.then( () => res.status(200).json({success: true, message: 'Recipe have been added to favorites!'}))
-					.catch( () => res.status(500).json({success: false, message: 'An error occured'}));
-			}
+				// retun res.status(400).send({message: 'Recipe has already been added to favorites!'});
+			} 
+			return Favorite
+				.create({
+					userId, 
+					recipeId
+				})
+				.then( () => res.status(200).json({success: true, message: 'Recipe have been added to favorites!'}))
+				.catch( () => res.status(500).json({success: false, message: 'An error occured'}));
+			
 		})
 		.catch( () => res.status(500).json({success: false, message: 'An error occured !'}));
 
 };
 
 // get user favourite
-// GET ---> api/users/:userId/recipes
+// GET ---> api/users/:userId/favourites
 export const getUserFavorites = (req, res) => {
 
 	const { userId } = req.params;
@@ -57,8 +57,8 @@ export const getUserFavorites = (req, res) => {
 			// console.log(favorites);
 			if ( favoritesCount == 0 ) {
 				return res.status(200).json({
-					success:true,
-					message: 'User has no recipes in favorites',
+					success: true,
+					message: 'User has no recipe in favorites',
 				});
 			}
 			const recipes = favorites.map( fav => fav.Recipe);

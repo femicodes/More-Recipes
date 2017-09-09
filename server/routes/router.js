@@ -11,7 +11,6 @@ import { verifyUserSession } from '../middleware/authorize';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	// console.log(req.query.token);
 	res.status(200).json({success: true, message: 'Welcome to More Recipes'});
 });
 
