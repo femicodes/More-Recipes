@@ -43,6 +43,7 @@ describe('API Integration Tests', () => {
 		// 	request.post(signupURl)
 		// 		.send(data)
 		// 		.end((err, res) => {
+		// 			console.log(res);
 		// 			expect(res.status).to.equal(201);
 		// 			expect(res.body.success).to.equal(true);
 		// 			expect(res.body.message).to.equal('Account created successfully');
@@ -58,7 +59,7 @@ describe('API Integration Tests', () => {
 				.send(invalidData)
 				.end((err, res) => {
 					expect(res.status).to.equal(422);
-					expect(res.body.message).to.equal('Username cannot be empty');
+					expect(res.body.message).to.equal('Username is required');
 					done();
 				});
 		});
@@ -71,7 +72,7 @@ describe('API Integration Tests', () => {
 				.send(invalidData)
 				.end((err, res) => {
 					expect(res.status).to.equal(422);
-					expect(res.body.message).to.equal('Email cannot be empty');
+					expect(res.body.message).to.equal('Email is required');
 					done();
 				});
 		});
@@ -84,7 +85,7 @@ describe('API Integration Tests', () => {
 				.send(invalidData)
 				.end((err, res) => {
 					expect(res.status).to.equal(422);
-					expect(res.body.message).to.equal('Password cannot be empty');
+					expect(res.body.message).to.equal('Password is required');
 					done();
 				});
 		});
@@ -110,7 +111,7 @@ describe('API Integration Tests', () => {
 				.send(invalidData)
 				.end((err, res) => {
 					expect(res.status).to.equal(422);
-					expect(res.body.message).to.equal('Password must be atleast 6 characters long !');
+					expect(res.body.message).to.equal('Password must be atleast 6 characters long!');
 					done();
 				});
 		});

@@ -26,7 +26,7 @@ export const createUser = (req, res) => {
 	} else if (password === '') {
 		err_msg = 'Password is required';
 	} else if (password.length < 6) {
-		err_msg = 'Password must be atleast 6 characters long !';
+		err_msg = 'Password must be atleast 6 characters long!';
 	}
 
 	if (err_msg) 
