@@ -23,5 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false}));
 // Set router for path 
 app.use('/api/v1/', router);
 
+// use not found routes!
+
 // export app
 export default app;
