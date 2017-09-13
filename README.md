@@ -11,7 +11,7 @@ A platform for users to share the awesome and exciting recipes ideas they have l
  1. Express
  1. Sequelize
 
-**BASE_URL:** `https://more-recipes-007.herokuapp.com/api/v1/`
+**BASE_URL:** `https://more-recipes-07.herokuapp.com/api/v1/`
 
 ### RECIPES
 - **`POST` /recipes**
