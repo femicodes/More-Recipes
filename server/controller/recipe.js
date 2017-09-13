@@ -1,32 +1,31 @@
 import db from '../models';
 
-const { Recipe} = db;
-// const {Review, User} = db;
+const { Recipe, Review, User} = db;
 
-// returns all recipes ! 
+// Get data on a recipe
 // GET ---> recipes
-
 export const getRecipe = (req, res) => {
 	const recipeId = parseInt(req.params.recipeId);
-	// console.log(recipeId);
 	return Recipe
-		.findById(recipeId)
+		.find({
+			where: {id: recipeId}, 
+			include: [{ model: Review, as: 'reviews', attributes: ['id', 'body', 'userId'] }],
+		})
 		.then( recipe => {
 			if (recipe)
-				res.status(200).json(recipe);
+				res.status(200).json({success: true, recipe});
 			else 
 				res.status(200).json({success: true, message: 'recipe does not exist'});
 		})
 		.catch(err => res.status(404).json({
 			success: false,
-			message: err.errors[0].message
+			message: err
 		}));
 };
 
 
 // query ---> start=10, end=20; sort=upvotes&order=ascending
 export const getRecipes = (req, res) => {
-	// console.log(req.query.sort, req.query.order);
 	let {sort, order} = req.query;
 
 	if (sort && order) {
@@ -50,28 +49,38 @@ export const getRecipes = (req, res) => {
 		// else if the order and sort is okay. ! 
 		return Recipe
 			.findAll({
-				attributes: ['id', 'title', 'description', 'ingredient', 'direction', 'upvoteCount', 'downvoteCount'],
+				// attributes: ['id', 'title', 'description', 'ingredient', 'direction', 'upvoteCount', 'downvoteCount'],
 				order: [[sortCriteria, orderCriteria]],
-				// include: [
-				// 	{ model: Review, as: 'reviews', attributes: ['id', 'body'] },
-				// 	{ model: User, attributes: ['id', 'username', 'fullname'] }
-				// ]
+				include: [
+					{ model: Review, as: 'reviews', attributes: ['id', 'body', 'userId'] },
+					{ model: User, attributes: ['id', 'username', 'fullname'] }
+				]
 			})
-			.then(recipes => res.status(200).send({ success: true, recipes}))
+			.then(recipes => {
+				const recipeCount = recipes.length;
+				if (recipeCount === 0) 
+					return res.status(200).send({success: true, message: 'No recipes found'});
+				res.status(200).send({ success: true, message: `${recipeCount} recipes found`, recipes});
+			})
 			.catch( () => res.status(500).send({success: false, message: 'cant get recipes'}));
 	}
 
-	// if no query at all, just return all the recipes 
+	// if no query passed, just return all the recipes 
 	return Recipe
 		.findAll({
-			attributes: ['id', 'title', 'description', 'ingredient', 'direction', 'upvoteCount', 'downvoteCount'],
+			// attributes: ['id', 'userId', 'title', 'description', 'ingredient', 'direction', 'upvoteCount', 'downvoteCount'],
 			order: [['upvoteCount', 'DESC']],
-			// include: [
-			// 	{ model: Review, as: 'reviews', attributes: ['id', 'body'] },
-			// 	{ model: User, attributes: ['id', 'username', 'fullname'] }
-			// ]
+			include: [
+				{ model: Review, as: 'reviews', attributes: ['id', 'body', 'userId'] },
+				{ model: User, attributes: ['id', 'username', 'fullname'] }
+			]
 		})
-		.then(recipes => res.status(200).send({success: true, recipes }))
+		.then(recipes => {
+			const recipeCount = recipes.length;
+			if (recipeCount === 0) 
+				return res.status(200).send({success: true, message: 'No recipes found'});
+			res.status(200).send({ success: true, message: `${recipeCount} recipes found`, recipes});	
+		})
 		.catch( err => res.status(404).json({
 			success: false,
 			message: err.errors[0].message
@@ -82,7 +91,6 @@ export const getRecipes = (req, res) => {
 // create a recipe 
 export const createRecipe = (req, res) => {
 	const {userId} = req;
-	// const {title, description, ingredient, direction} = req.body;
 	
 	let title = req.body.title? req.body.title.trim() : '';
 	let description = req.body.description? req.body.description.trim(): '';
@@ -99,7 +107,7 @@ export const createRecipe = (req, res) => {
 			direction,
 		})
 		.then(recipe => res.status(201)
-			.json({message: 'recipe created successfully', recipe}))
+			.json({success: true, message: 'recipe created successfully', recipe}))
 		.catch( (err) => res.status(500).json({success: false, message: err})
 		);
 };
@@ -113,21 +121,21 @@ export const modifyRecipe = (req, res) => {
 		.findById(recipeId)
 		.then( recipe => {
 			if (recipe.userId !== userId) {
-				res.status(403).json({success: false, message: 'Not authorized to delete this recipe!'});
+				return res.status(403).json({success: false, message: 'Not authorized to modify this recipe!'});
 			}
 			return recipe
 				.update({
-					title: recipe.body.title || recipe.title,
-					description: recipe.body.description || recipe.description,
-					ingredient: recipe.body.ingredient || recipe.ingredient,
-					direction: recipe.body.direction || recipe.direction,
+					title: req.body.title || recipe.title,
+					description: req.body.description || recipe.description,
+					ingredient: req.body.ingredient || recipe.ingredient,
+					direction: req.body.direction || recipe.direction,
 				})
-				.then( recipe => res.status(200).json({message: 'recipe updated successfully', recipe}))
+				.then( recipe => res.status(200).json({success: true, message: 'recipe updated successfully', recipe}))
 				.catch( () => res.status(400).json({success: false, message: 'Error modifying recipe'}));
 		})
 		.catch( () => res.status(500).json({
 			success: false,
-			message: 'Error modifying recipe'
+			message: 'Error modifying recipe!'
 		}));
 };
 	
@@ -139,16 +147,16 @@ export const deleteRecipe = (req, res) => {
 		.findById(req.params.recipeId)
 		.then( recipe => {
 			if (recipe.userId !==  userId) {
-				return res.status(404).json({success: false, message: 'Not authorized to delete this recipe'});
+				return res.status(403).json({success: false, message: 'Not authorized to delete this recipe'});
 			}
 			recipe
 				.destroy()
 				.then( () => res.status(200).json({sucess: true, message: 'Recipe deleted successfully'}))
 				.catch( () => res.status(400).json({success: false, message: 'Recipe cannot be deleted'}));
 		})
-		.catch(err => res.status(500).json({
+		.catch( () => res.status(500).json({
 			success: false, 
-			message: err.errors[0].message
+			message: 'Error deleting recipe!'
 		}));
 };
 

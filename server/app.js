@@ -23,7 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false}));
 // Set router for path 
 app.use('/api/v1/', router);
 
-// use not found routes!
+// catches error404 handler 
+app.use((req, res) => {
+	res.status(404).send({success: false, message: 'Not Found!'});
+});
 
 // export app
 export default app;

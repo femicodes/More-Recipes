@@ -4,7 +4,7 @@ const { Recipe, Favorite } = db;
 
 
 // favourite a recipe
-// POST ---> api/users/:userId/recipes/:recipeId 
+// POST ---> api/recipes/:recipeId/favorite
 export const favoriteRecipe = (req, res) => {
 	const { recipeId } = req.params;
 	const { userId } = req;
@@ -17,12 +17,9 @@ export const favoriteRecipe = (req, res) => {
 		})
 		.then( favorite => {
 			if (favorite) {
-				// console.log(favorite);
 				return favorite
 					.destroy()  
 					.then(res.status(200).json({success: true, message: 'Recipe have been removed from favorites!'}));
-
-				// retun res.status(400).send({message: 'Recipe has already been added to favorites!'});
 			} 
 			return Favorite
 				.create({
@@ -54,7 +51,6 @@ export const getUserFavorites = (req, res) => {
 		})
 		.then( favorites => {
 			const favoritesCount =  favorites.length;
-			// console.log(favorites);
 			if ( favoritesCount == 0 ) {
 				return res.status(200).json({
 					success: true,

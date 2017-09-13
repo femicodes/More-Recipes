@@ -40,7 +40,7 @@ export const createUser = (req, res) => {
 			fullname: req.body.fullname
 		})
 		.then(user => {
-			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '120m'});
+			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '60m'});
 			res.status(201).json({
 				success: true,
 				message: 'Account created successfully',
@@ -74,7 +74,7 @@ export const loginUser = (req, res) => {
 			}
 		})
 		.then( user => { 
-			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '120m'});
+			const token = jwt.sign({user}, process.env.SECRET_KEY, { expiresIn: '60m'});
 			bcryptjs.compare(password, user.password).then( check => {
 				if (check) {
 					// console.log(req.userId); 
