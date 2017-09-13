@@ -4,10 +4,8 @@ const {User, Recipe} = db;
 
 
 export function checkRecipeExist(req, res, next) {
-	// console.log(typeof req.params.recipeId);
-
 	let recipeId = req.params.recipeId ? parseInt(req.params.recipeId) : '';
-	// console.log(recipeId);
+	
 	Recipe 
 		.findOne({
 			where: {
@@ -18,13 +16,12 @@ export function checkRecipeExist(req, res, next) {
 			if (!recipe) return res.status(404).json({success: false, message: 'Recipe does not exist'});
 			else next();
 		})
-		.catch( () => res.status(500).json({success: false, message: 'Invalid recipe id'}));
+		.catch( () => res.status(500).json({success: false, message: 'Invalid recipe id; id must be an number'}));
 
 }
 
 // check if username exist !
 export function checkUsernameExist(req, res, next) {
-	console.log(req.body.username);
 
 	let username = ( req.body.username && typeof req.body.username === 'string' )? req.body.username.trim(): '';
 	if ( !username ) 
@@ -56,5 +53,5 @@ export function checkUserExist(req, res, next) {
 				res.status(404).json({success: false, message: 'User does not exist'});
 			} else next();
 		})
-		.catch( () => res.status(500).json({success: false, message: 'invalid user id; id must be an integer'}));
+		.catch( () => res.status(500).json({success: false, message: 'invalid user id; id must be an number'}));
 }

@@ -14,14 +14,16 @@ export const getReviews = (req, res) => {
 			}
 		})
 		.then( reviews => {
-			if (reviews.length == 0)
+			const reviewLen = reviews.length;
+			if (reviewLen == 0)
 				return res.status(404).json({success: true, message: 'No review found for this recipe'});
-			return res.status(201).json(reviews);
+			return res.status(200).json({success: true, message: `${reviewLen} reviews found`, reviews});
 		})
-		.catch(err => res.status(404).json(err));
+		.catch( () => res.status(500).json({success: false, message:'Error'}));
 };
 
-// --> api/recipes/<recipeId>/reviews
+
+// --> api/recipes/<recipeId>/review
 export const postReview = (req, res) => {
 	const { userId } = req;
 	const { content } = req.body; 
@@ -49,10 +51,10 @@ export const postReview = (req, res) => {
 					body: content
 				})
 					.then( () => res.status(200).json({success: true, message: 'Your review have been recorded successfully'}))
-					.catch(err => res.statu(500).json(err));
+					.catch( () => res.statu(500).json({success: false, message: 'Error !'}));
 			}
 		})
-		.catch( err => {
-			return res.status(500).json(err);
+		.catch( () => {
+			return res.status(500).json({success: false, messae: 'Error !'});
 		});
 };
