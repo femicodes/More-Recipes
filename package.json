@@ -10,7 +10,7 @@
     "start:dev": "nodemon --exec babel-node server/bin/www",
     "test:local": "cross-env NODE_ENV=test_local&& npm run migrate:undo&& npm run migrate&& nyc mocha server/test/test.js --compilers js:babel-core/register",
     "test:db": "set NODE_ENV=test && sequelize db:migrate:undo:all&&sequelize db:migrate && cross-env NODE_ENV=test nyc mocha server/test/test.js", 
-    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register server/test/test.js ",
+    "test": "cross-env NODE_ENV=test && nyc mocha --compilers js:babel-core/register server/test/test.js ",
     "migrate": "sequelize db:migrate",
     "migrate:undo": "sequelize db:migrate:undo:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
