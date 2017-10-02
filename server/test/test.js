@@ -43,7 +43,7 @@ describe('API Integration Tests', () => {
 			request.post(signupURl)
 				.send(data)
 				.end((err, res) => {
-					console.log(res);
+					// console.log(res);
 					expect(res.status).to.equal(201);
 					expect(res.body.success).to.equal(true);
 					expect(res.body.message).to.equal('Account created successfully');
