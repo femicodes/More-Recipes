@@ -1,20 +1,27 @@
+env:
+  global: 
+    - CC_TEST_REPORTER_ID: "93634191521662e0536419c362e00c7e1c1a581fd3bce4587d72683708d1b591"
+
 language: node_js
 
 node_js:
-  - "stable"
+  - 6.10.0
 
 cache:
   directories:
     - node_modules
 
+addons:
+    code_climate:
+        repo_token: "93634191521662e0536419c362e00c7e1c1a581fd3bce4587d72683708d1b591"
+
 script: npm test
 
+# before script
 before_script:
   - npm install
-  - psql -c "create database test" -U postgres
-
-after_script:
-  - psql -c "drop database test" -U postgres
+  - createdb more-recipes-test -U postgres
+  - sequelize db:migrate
 
 after_success: npm run coverage
 

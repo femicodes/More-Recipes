@@ -1,11 +1,12 @@
 # More Recipes 
-[![Build Status](https://travis-ci.org/tobyleye/More-Recipes.svg?branch=develop)](https://travis-ci.org/tobyleye/More-Recipes)
+[![Build Status](https://travis-ci.org/tobyleye/More-Recipes.svg?branch=develop)](https://travis-ci.org/tobyleye/More-Recipes) 
+[![Code Climate](https://codeclimate.com/github/tobyleye/More-Recipes/badges/gpa.svg)](https://codeclimate.com/github/tobyleye/More-Recipes)
+[![Test Coverage](https://codeclimate.com/github/tobyleye/More-Recipes/badges/coverage.svg)](https://codeclimate.com/github/tobyleye/More-Recipes/coverage)
+[![Issue Count](https://codeclimate.com/github/tobyleye/More-Recipes/badges/issue_count.svg)](https://codeclimate.com/github/tobyleye/More-Recipes)
 
 A platform for users to share the awesome and exciting recipes ideas they have learnt or invented
 
 ### Technologies
------
-
  1. Nodejs
  1. Postgresql
  1. Express

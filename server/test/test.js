@@ -38,31 +38,31 @@ describe('API Integration Tests', () => {
 			};
 		});
 		
-		// it('return 201 for a successful account creation', (done) => {
+		it('return 201 for a successful account creation', (done) => {
 			
-		// 	request.post(signupURl)
-		// 		.send(data)
-		// 		.end((err, res) => {
-		// 			console.log(res);
-		// 			expect(res.status).to.equal(201);
-		// 			expect(res.body.success).to.equal(true);
-		// 			expect(res.body.message).to.equal('Account created successfully');
-		// 			done();
-		// 		});
-		// });
+			request.post(signupURl)
+				.send(data)
+				.end((err, res) => {
+					// console.log(res);
+					expect(res.status).to.equal(201);
+					expect(res.body.success).to.equal(true);
+					expect(res.body.message).to.equal('Account created successfully');
+					done();
+				});
+		});
 
-		// it('return 400 for an already existing email ', (done) => {
-		// 	const invalidData = Object.assign({}, data);
-		// 	invalidData.username = 'user2';
-		// 	request.post(signupURl)
-		// 		.send(invalidData)
-		// 		.end((err, res) => {
-		// 			expect(res.status).to.equal(400);
-		// 			expect(res.body.success).to.equal(false);
-		// 			expect(res.body.message).to.equal('Email is already taken, please enter another');
-		// 			done();
-		// 		});
-		// });
+		it('return 400 for an already existing email ', (done) => {
+			const invalidData = Object.assign({}, data);
+			invalidData.username = 'user2';
+			request.post(signupURl)
+				.send(invalidData)
+				.end((err, res) => {
+					expect(res.status).to.equal(400);
+					expect(res.body.success).to.equal(false);
+					expect(res.body.message).to.equal('Email is already taken, please enter another');
+					done();
+				});
+		});
 		
 
 
