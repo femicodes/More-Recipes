@@ -11,10 +11,8 @@ script: npm test
 
 before_script:
   - npm install
-  - psql -c "create database test" -U postgres
-
-after_script:
-  - psql -c "drop database test" -U postgres
+  - psql -c "create database more-recipe-test" -U postgres
+  - sequelize db:migrate
 
 after_success: npm run coverage
 
