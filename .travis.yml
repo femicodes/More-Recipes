@@ -17,6 +17,7 @@ addons:
 
 script: npm test
 
+# before script
 before_script:
   - npm install
   - createdb more-recipes-test -U postgres
